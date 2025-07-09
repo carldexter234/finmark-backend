@@ -3,18 +3,23 @@ const jwt = require('jsonwebtoken');
 const user = require('../models/user');
 
 exports.login = (req, res) => {
-  console.log(req.body);
-
   const { email, password } = req.body;
 
+  // ✅ Check for missing fields FIRST
+  if (!email || !password) {
+    return res.status(400).json({
+      message: "Email and password are required fields."
+    });
+  }
+
   if (email !== user.email) {
-    return res.status(401).json({ message: 'Invalid email.' });
+    return res.status(401).json({ message: "Invalid email." });
   }
 
   const isMatch = bcrypt.compareSync(password, user.password);
 
   if (!isMatch) {
-    return res.status(401).json({ message: 'Invalid password.' });
+    return res.status(401).json({ message: "Invalid password." });
   }
 
   const token = jwt.sign({ email }, process.env.JWT_SECRET, {
@@ -22,7 +27,7 @@ exports.login = (req, res) => {
   });
 
   return res.json({
-    message: 'Login successful.',
+    message: "Login successful.",
     token
   });
 };
