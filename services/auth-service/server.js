@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+console.log("JWT_SECRET loaded:", process.env.JWT_SECRET);
 
 const authRoutes = require('./routes/auth');
 
@@ -11,7 +12,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);

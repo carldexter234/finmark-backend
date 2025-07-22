@@ -1,3 +1,6 @@
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const user = require('../models/user');
@@ -5,7 +8,6 @@ const user = require('../models/user');
 exports.login = (req, res) => {
   const { email, password } = req.body;
 
-  // ✅ Check for missing fields FIRST
   if (!email || !password) {
     return res.status(400).json({
       message: "Email and password are required fields."
